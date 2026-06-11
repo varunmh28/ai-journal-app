@@ -7,6 +7,7 @@ import { TamaguiProvider } from 'tamagui'
 
 import { ClerkProvider } from "@clerk/expo"
 import { tokenCache } from '@clerk/expo/token-cache'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { tamaguiConfig } from '../tamagui.config'
 
 export default function RootLayout() {
@@ -17,6 +18,7 @@ if (!publishableKey) {
   throw new Error('Add your Clerk Publishable Key to the .env file')
 }
   return (
+    <SafeAreaProvider>
    <ClerkProvider tokenCache={tokenCache} publishableKey={publishableKey}>
 
     <TamaguiProvider config={tamaguiConfig} defaultTheme={colorScheme!}>
@@ -28,5 +30,6 @@ if (!publishableKey) {
       </ThemeProvider>
     </TamaguiProvider>
     </ClerkProvider>
+    </SafeAreaProvider>
   )
 }

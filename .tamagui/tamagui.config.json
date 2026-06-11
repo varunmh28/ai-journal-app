@@ -120491,7 +120491,6 @@
       "onlyAllowShorthands": true,
       "styleCompat": "web"
     },
-    "reactNative": true,
     "animations": {
       "isReactNative": false,
       "inputStyle": "css",
