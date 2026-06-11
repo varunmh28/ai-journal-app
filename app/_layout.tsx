@@ -1,7 +1,7 @@
 import '../tamagui.generated.css'
 
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native'
-import { Stack } from 'expo-router'
+import { Slot } from 'expo-router'
 import { useColorScheme } from 'react-native'
 import { TamaguiProvider } from 'tamagui'
 
@@ -23,10 +23,7 @@ if (!publishableKey) {
 
     <TamaguiProvider config={tamaguiConfig} defaultTheme={colorScheme!}>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-        </Stack>
+        <Slot />
       </ThemeProvider>
     </TamaguiProvider>
     </ClerkProvider>
