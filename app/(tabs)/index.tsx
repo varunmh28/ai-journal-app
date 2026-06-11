@@ -6,6 +6,7 @@ import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Link } from 'expo-router';
+import { Button } from 'tamagui';
 
 export default function HomeScreen() {
   return (
@@ -19,6 +20,8 @@ export default function HomeScreen() {
       }>
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Welcome!</ThemedText>
+        <Button bg="$blue10">Hi</Button>
+        
         <HelloWave />
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
