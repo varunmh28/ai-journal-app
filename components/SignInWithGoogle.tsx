@@ -1,70 +1,56 @@
 import { useSSO } from "@clerk/expo";
 import * as AuthSession from "expo-auth-session";
-import { useRouter } from "expo-router";
 import * as WebBrowser from "expo-web-browser";
 import React, { useCallback, useEffect } from "react";
 import { Platform } from "react-native";
 import { Button } from "tamagui";
 
-// Preloads the browser for Android devices to reduce authentication load time
-// See: https://docs.expo.dev/guides/authentication/#improving-user-experience
+// 1. Warm-up hook for Android
 export const useWarmUpBrowser = () => {
   useEffect(() => {
     if (Platform.OS !== "android") return;
     void WebBrowser.warmUpAsync();
     return () => {
-      // Cleanup: closes browser when component unmounts
       void WebBrowser.coolDownAsync();
     };
   }, []);
 };
 
-// Handle any pending authentication sessions
 WebBrowser.maybeCompleteAuthSession();
 
 export default function SignInWithGoogle() {
   useWarmUpBrowser();
-  const router = useRouter();
 
-  // Use the `useSSO()` hook to access the `startSSOFlow()` method
   const { startSSOFlow } = useSSO();
 
   const onPress = useCallback(async () => {
     try {
-      // Start the authentication process by calling `startSSOFlow()`
-      const { createdSessionId, setActive } = await startSSOFlow({
+      // 🚀 THE NEW PATTERN: We don't use setActive anymore.
+      // We rely on the promise resolving to confirm auth.
+      const { createdSessionId, signIn, signUp } = await startSSOFlow({
         strategy: "oauth_google",
-        // For web, defaults to current path
-        // For native, you must pass a scheme, like AuthSession.makeRedirectUri({ scheme, path })
-        // For more info, see https://docs.expo.dev/versions/latest/sdk/auth-session/#authsessionmakeredirecturioptions
-        redirectUrl: AuthSession.makeRedirectUri({}),
+        // Ensure this matches your app.json scheme!
+        redirectUrl: AuthSession.makeRedirectUri({ path: "/(tabs)" }),
       });
 
-      // If sign in was successful, set the active session
+      // 🚀 Check if the session was created successfully
       if (createdSessionId) {
-        setActive!({
-          session: createdSessionId,
-          // Check for session tasks and navigate to custom UI to help users resolve them
-          // See https://clerk.com/docs/guides/development/custom-flows/overview#session-tasks
-          navigate: async ({ session }) => {
-            if (session?.currentTask) {
-              console.log(session?.currentTask);
-              // No need to navigate to any other page as Protected Route will handle it
-              return;
-            }
-          },
-        });
+        // If createdSessionId exists, the session is already active!
+        // Do NOT call setActive. The system is already signed in.
+        // The RootLayout's <Stack.Protected> will automatically handle navigation.
+        console.log("Successfully signed in via Google!");
       } else {
-        // If there is no `createdSessionId`,
-        // there are missing requirements, such as MFA
-        // See https://clerk.com/docs/guides/development/custom-flows/authentication/oauth-connections#handle-missing-requirements
+        // If createdSessionId is null but signIn is populated, 
+        // handle the 'transfer' logic for returning users (as we discussed)
+        if (signIn?.firstFactorVerification?.status === "transferable") {
+          await signIn.create({ transfer: true });
+          console.log("Transfer successful, user authenticated.");
+        }
       }
     } catch (err) {
-      // See https://clerk.com/docs/guides/development/custom-flows/error-handling
-      // for more info on error handling
-      console.error(JSON.stringify(err, null, 2));
+      console.error("OAuth Error:", JSON.stringify(err, null, 2));
     }
-  }, [router, startSSOFlow]);
+  }, [startSSOFlow]);
 
   return (
     <Button

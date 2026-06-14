@@ -50,7 +50,11 @@ export default function Page() {
       // ⚡ Step 3: Verify the reactive status and finalize securely
       if (signIn.status === "complete") {
         await signIn.finalize({
-          navigate: () => router.replace("/"),
+          // 🚀 FIX: Do NOT use router.replace here! 
+          // Leave this callback empty. This allows Clerk to quietly set the token 
+          // into SecureStore. Once it finishes, your <Stack.Protected> layout guard 
+          // will automatically detect the state change and mount the tabs!
+          navigate: async () => {} 
         });
       } else {
         // Handles secondary auth steps (like MFA, user trust checks, etc.)
