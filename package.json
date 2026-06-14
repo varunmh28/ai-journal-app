@@ -19,6 +19,8 @@
     "@react-navigation/bottom-tabs": "^7.4.0",
     "@react-navigation/elements": "^2.6.3",
     "@react-navigation/native": "^7.1.8",
+    "@sanity/client": "^7.22.1",
+    "@sanity/image-url": "^2.1.1",
     "@tamagui/babel-plugin": "^2.2.0",
     "@tamagui/config": "^2.2.0",
     "@tamagui/lucide-icons": "^1.144.4",
@@ -39,6 +41,7 @@
     "expo-symbols": "~1.0.8",
     "expo-system-ui": "~6.0.9",
     "expo-web-browser": "~15.0.11",
+    "groq": "^6.0.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-native": "0.81.5",
@@ -62,9 +65,8 @@
     "typescript": "~5.9.2"
   },
   "private": true,
-  
   "overrides": {
-  "@tamagui/core": "2.2.0",
-  "@tamagui/web": "2.2.0"
-}
+    "@tamagui/core": "2.2.0",
+    "@tamagui/web": "2.2.0"
+  }
 }
