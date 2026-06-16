@@ -14,8 +14,8 @@ import { tamaguiConfig } from '../tamagui.config'
 
 export default function RootLayout() {
   const colorScheme = useColorScheme()
-  // const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!
-const  publishableKey="pk_test_YnVzeS1vY3RvcHVzLTMwLmNsZXJrLmFjY291bnRzLmRldiQ"
+  const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!
+//const  publishableKey="pk_test_YnVzeS1vY3RvcHVzLTMwLmNsZXJrLmFjY291bnRzLmRldiQ"
 
 if (!publishableKey) {
   throw new Error('Add your Clerk Publishable Key to the .env file')

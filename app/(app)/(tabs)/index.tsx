@@ -1,13 +1,16 @@
 
+import DailyPromptCards from '@/components/DailyPromptCards';
+import Logo from '@/components/Logo';
+import { IconSymbol } from '@/components/ui/icon-symbol';
 import { AppColors } from '@/constants/theme';
 import { useStreaks } from '@/hooks/use-streaks';
 import { formatUppercaseDate, getTimeOfDayGreeting } from '@/lib/utils/date';
 import { getUserFirstName } from '@/lib/utils/user';
 import { useUser } from '@clerk/expo';
 import { useRouter } from 'expo-router';
-import { StyleSheet } from "react-native";
+import { Pressable, ScrollView, StyleSheet } from "react-native";
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Spinner, Text, View } from 'tamagui';
+import { Card, H1, Spinner, Text, View, XStack, YStack } from 'tamagui';
 
 export default function HomeScreen() {
 
@@ -44,10 +47,247 @@ export default function HomeScreen() {
   
   return (
     
-    <View>
-      <Text>Home</Text>
+    <View style={styles.container}>
+      <ScrollView
+        px="$4"
+        contentContainerStyle={{
+          ...styles.scrollContent,
+          paddingTop: insets.top,
+        }}
+      >
+        {/* Header with date */}
+        <YStack gap="$2" style={{ alignItems: "center" }} mt="$4">
+          <Logo />
+          <Text
+            fontSize="$2"
+            color="$color10"
+            textTransform="uppercase"
+            fontWeight="500"
+          >
+            {formattedDate}
+          </Text>
+        </YStack>
+
+        {/* Greeting with forced inline color */}
+        <YStack gap="$2" style={{ alignItems: "center" }} mb="$4" mt="$4">
+          <H1
+            fontSize="$8"
+            fontWeight="600"
+            style={{ textAlign: "center" }}
+            color="#000000"
+          >
+            {greeting}, {userName}!
+          </H1>
+        </YStack>
+
+         {/* Weekly Calendar Strip */}
+         <XStack style={{ justifyContent: "space-between" }} mb="$6" px="$3">
+          {Array.from({ length: 7 }, (_, i) => {
+            // Calculate date for this day of the week
+            const startOfWeek = new Date(now);
+            startOfWeek.setDate(now.getDate() - now.getDay() + i);
+
+            const dayData = {
+              dayName: startOfWeek.toLocaleDateString("en-US", {
+                weekday: "short",
+              }),
+              dayNumber: startOfWeek.getDate(),
+              isToday: startOfWeek.toDateString() === now.toDateString(),
+            };
+
+            return (
+              <YStack key={i} gap="$1" style={{ alignItems: "center" }}>
+                <Text fontSize="$2" color="$color10" fontWeight="500">
+                  {dayData.dayName}
+                </Text>
+                <View
+                  style={[
+                    styles.dayCircle,
+                    dayData.isToday && styles.todayCircle,
+                  ]}
+                >
+                  <Text
+                    fontSize="$3"
+                    color={dayData.isToday ? "white" : "$color11"}
+                    fontWeight={dayData.isToday ? "600" : "400"}
+                  >
+                    {dayData.dayNumber}
+                  </Text>
+                </View>
+              </YStack>
+            );
+          })}
+        </XStack>
+
+        {/* Streak Section */}
+        {!streaksLoading && (
+          <YStack gap="$3" mb="$6">
+            <Card
+              elevate
+              size="$4"
+              bordered
+              bg="$background"
+              borderColor="$borderColor"
+              padding="$5"
+              
+              
+            >
+              <XStack
+                style={{
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                {/* Current Streak */}
+                <YStack gap="$2" style={{ alignItems: "center" }} flex={1}>
+                  <Text fontSize="$2" color="$color10" fontWeight="600">
+                    CURRENT STREAK
+                  </Text>
+                  <XStack gap="$2" style={{ alignItems: "baseline" }}>
+                    <Text fontSize="$10" fontWeight="700" color="$color12">
+                      {currentStreak}
+                    </Text>
+                    <Text fontSize="$5" color="$color11" fontWeight="500">
+                      {currentStreak === 1 ? "day" : "days"}
+                    </Text>
+                  </XStack>
+                  <View style={{ marginTop: 4 }}>
+                    <IconSymbol
+                      size={24}
+                      name={isActive ? "flame.fill" : "zzz"}
+                      color={
+                        isActive ? AppColors.flameOrange : AppColors.gray400
+                      }
+                    />
+                  </View>
+                </YStack>
+
+                {/* Divider */}
+                <View
+                  style={{
+                    width: 1,
+                    height: 60,
+                    backgroundColor: "#e5e7eb",
+                    marginHorizontal: 16,
+                  }}
+                />
+
+                {/* Best Streak */}
+                <YStack gap="$2" style={{ alignItems: "center" }} flex={1}>
+                  <Text fontSize="$2" color="$color10" fontWeight="600">
+                    BEST STREAK
+                  </Text>
+                  <XStack gap="$2" style={{ alignItems: "baseline" }}>
+                    <Text fontSize="$10" fontWeight="700" color="$color11">
+                      {longestStreak}
+                    </Text>
+                    <Text fontSize="$5" color="$color10" fontWeight="500">
+                      {longestStreak === 1 ? "day" : "days"}
+                    </Text>
+                  </XStack>
+                  <View style={{ marginTop: 4 }}>
+                    <IconSymbol
+                      size={28}
+                      name="trophy.fill"
+                      color={AppColors.trophyGold}
+                    />
+                  </View>
+                </YStack>
+              </XStack>
+            </Card>
+
+            {/* Motivational Messages Outside Card */}
+            <YStack gap="$2" style={{ alignItems: "center" }} pt="$2">
+              <Text
+                fontSize="$4"
+                color="$color11"
+                fontWeight="500"
+                style={{ textAlign: "center" }}
+              >
+                {statusMessage}
+              </Text>
+
+              {daysUntilNextMilestone > 0 && (
+                <XStack gap="$2" style={{ alignItems: "center" }}>
+                  <IconSymbol size={16} name="target" color="#6b7280" />
+                  <Text fontSize="$3" color="$color10">
+                    {daysUntilNextMilestone} days until {nextMilestone}-day
+                    milestone!
+                  </Text>
+                </XStack>
+              )}
+            </YStack>
+          </YStack>
+        )}
+
+
+         {/* Daily Prompts Section */}
+         <DailyPromptCards />
+
+{/* Action Buttons */}
+<YStack gap="$3" mb="$6">
+  {/* Add New Entry Button */}
+  <Pressable
+    onPress={() => router.push("/new-entry")}
+    style={({ pressed }) => [{ opacity: pressed ? 0.8 : 1 }]}
+  >
+    <Card
+      elevate
+      size="$4"
+      bordered
+      bg="$purple9"
+      borderColor="$purple9"
+      padding="$4"
+      paddingHorizontal="$6"
+    >
+      <XStack
+        gap="$3"
+        style={{ alignItems: "center", justifyContent: "center" }}
+      >
+        <IconSymbol
+          size={24}
+          name="plus.circle.fill"
+          color={AppColors.white}
+        />
+        <Text fontSize="$5" fontWeight="600" color="white">
+          Add New Entry
+        </Text>
+      </XStack>
+    </Card>
+  </Pressable>
+
+  {/* View Previous Entries Button */}
+  <Pressable
+    onPress={() => router.push("/(app)/(tabs)/entries")}
+    style={({ pressed }) => [{ opacity: pressed ? 0.8 : 1 }]}
+  >
+    <Card
+      elevate
+      size="$4"
+      bordered
+      bg="$background"
+      borderColor="$borderColor"
+      padding="$4"
+    >
+      <XStack
+        gap="$3"
+        style={{ alignItems: "center", justifyContent: "center" }}
+      >
+        <IconSymbol
+          size={24}
+          name="book.fill"
+          color={AppColors.primary}
+        />
+        <Text fontSize="$5" fontWeight="600" color="$color12">
+          View Entries
+        </Text>
+      </XStack>
+    </Card>
+  </Pressable>
+</YStack>
+
+      </ScrollView>
     </View>
-    
   );
 }
 
