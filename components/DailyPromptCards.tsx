@@ -79,7 +79,7 @@ export default function DailyPromptCards() {
         style={{ alignItems: "center", justifyContent: "space-between" }}
         px="$1"
       >
-        <Text fontSize="$5" fontWeight="600" color="$color1">
+        <Text fontSize="$5" fontWeight="600" color="$color10">
           Daily Prompts
         </Text>
         <Pressable onPress={loadPrompts} >
@@ -124,7 +124,7 @@ export default function DailyPromptCards() {
               <YStack gap="$3" style={{ height: "100%" }}>
                 {/* Icon and Title */}
                 <XStack gap="$2" style={{ alignItems: "center" }}>
-                  {prompt.emoji && <Text fontSize="$7">{prompt.emoji}</Text>}
+                  {prompt.emoji && <Text fontSize="$3">{prompt.emoji}</Text>}
                   {!prompt.emoji && (
                     <IconSymbol
                       size={32}
@@ -133,7 +133,7 @@ export default function DailyPromptCards() {
                     />
                   )}
                   <Text
-                    fontSize="$5"
+                    fontSize="$3"
                     fontWeight="600"
                     color="$color12"
                     style={{ flex: 1 }}

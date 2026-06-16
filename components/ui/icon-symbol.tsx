@@ -24,7 +24,8 @@ const MAPPING = {
   'zzz':'bedtime',
   'plus.circle.fill':'add-circle',
   'arrow.clockwise':'refresh',
-  'book.fill':'book'
+  'book.fill':'book',
+  'pencil.circle.fill':'create'
 } as IconMapping;
 
 /**

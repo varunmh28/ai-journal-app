@@ -122,6 +122,7 @@ export default function HomeScreen() {
         {/* Streak Section */}
         {!streaksLoading && (
           <YStack gap="$3" mb="$6">
+         
             <Card
               elevate
               size="$4"
