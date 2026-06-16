@@ -25,7 +25,10 @@ const MAPPING = {
   'plus.circle.fill':'add-circle',
   'arrow.clockwise':'refresh',
   'book.fill':'book',
-  'pencil.circle.fill':'create'
+  'pencil.circle.fill':'create',
+  'heart.fill':'favorite',
+  'person.fill':'person',
+  'plus':'add'
 } as IconMapping;
 
 /**
