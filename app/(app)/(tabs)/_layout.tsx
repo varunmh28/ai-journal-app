@@ -22,7 +22,6 @@ function PlusButton() {
       width={60}
       height={60}
       alignSelf="center"
-      size="$30"
     >
       <Pressable
         onPress={() => router.push("/new-entry")}
