@@ -1,16 +1,28 @@
-import '../tamagui.generated.css'
+import '@/polyfills';
+import '../tamagui.generated.css';
 
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native'
-import { Slot } from 'expo-router'
-import { useColorScheme } from 'react-native'
-import { TamaguiProvider } from 'tamagui'
+import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { Slot } from 'expo-router';
+import { useColorScheme } from 'react-native';
+import { TamaguiProvider } from 'tamagui';
 
-import { ModalProvider } from '@/contexts/ModalContext'
-import { ClerkLoaded, ClerkProvider } from "@clerk/expo"
-import { tokenCache } from '@clerk/expo/token-cache'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { tamaguiConfig } from '../tamagui.config'
+import { ModalProvider } from '@/contexts/ModalContext';
+import { ClerkProvider } from "@clerk/expo";
+import { tokenCache } from '@clerk/expo/token-cache';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { tamaguiConfig } from '../tamagui.config';
 
+// import { Platform } from 'react-native'
+
+// if (Platform.OS === 'web' || typeof window !== 'undefined') {
+//   const rn = require('react-native');
+//   if (!rn.TurboModuleRegistry) {
+//     rn.TurboModuleRegistry = {
+//       get: () => null,
+//       getEnforcing: () => null,
+//     };
+//   }
+// }
 
 export default function RootLayout() {
   const colorScheme = useColorScheme()
@@ -27,14 +39,17 @@ if (!publishableKey) {
 
 
     <TamaguiProvider config={tamaguiConfig} defaultTheme={colorScheme!}>
+        {/* <PortalProvider shouldAddRootHost> */}
       <ModalProvider>
 
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <ClerkLoaded>
+
+      {/* <ClerkLoaded> */}
         <Slot />
-    </ClerkLoaded>
+    {/* </ClerkLoaded> */}
       </ThemeProvider>
       </ModalProvider>
+      {/* </PortalProvider> */}
     </TamaguiProvider>
     </ClerkProvider>
     </SafeAreaProvider>

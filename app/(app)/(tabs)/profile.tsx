@@ -4,10 +4,9 @@ import { AppColors } from "@/constants/theme";
 import { useStreaks } from "@/hooks/use-streaks";
 import { getUserDisplayName, getUserInitials } from "@/lib/utils/user";
 import { useUser } from "@clerk/expo";
-import { Image, Linking, StyleSheet } from "react-native";
+import { Image, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
-  Button,
   Card,
   H1,
   H2,
@@ -16,7 +15,7 @@ import {
   Text,
   View,
   XStack,
-  YStack,
+  YStack
 } from "tamagui";
 
 export default function Profile() {
@@ -97,7 +96,7 @@ export default function Profile() {
               </YStack>
 
              {/* Plan Badge */}
-{user?.publicMetadata?.plan === "pro" ? (
+{/* {user?.publicMetadata?.plan === "pro" ? (
   <View style={styles.proPlanBadge}>
     <Text fontSize={13} fontWeight="700" color="#904BFF">
       ✨ Pro Plan
@@ -109,7 +108,7 @@ export default function Profile() {
       Free Plan
     </Text>
   </View>
-)}
+)} */}
               {/* </Protect> */}
             </YStack>
           </Card>
@@ -180,7 +179,7 @@ export default function Profile() {
             borderColor="$borderColor"
             padding="$5"
           >
-            <YStack gap="$4">
+            {/* <YStack gap="$4">
               <YStack gap="$2">
                 <H2 fontSize={18} fontWeight="700" color="$color12">
                   Subscription
@@ -201,7 +200,7 @@ export default function Profile() {
               >
                 View Plans & Pricing
               </Button>
-            </YStack>
+            </YStack> */}
           </Card>
 
           {/* Account Section */}
