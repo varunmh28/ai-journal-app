@@ -1,6 +1,23 @@
 import Constants from "expo-constants";
 
 export const generateAPIUrl = (relativePath: string) => {
+
+//production
+
+  // if (!__DEV__) {
+  //   // Expo automatically injects variables prefixed with EXPO_PUBLIC_
+  //   const productionOrigin = process.env.EXPO_PUBLIC_API_URL || "https://your-fallback-url.vercel.app";
+  //   const finalProductionUrl = `${productionOrigin}${relativePath}`;
+    
+  //   console.log("🚀 Production API Target URL:", finalProductionUrl);
+  //   return finalProductionUrl;
+  // }
+
+
+
+
+
+
   // 1. Extract the host debugger address from the running bundle configuration (e.g., "192.168.1.5:8081")
   const hostUri = Constants.expoConfig?.hostUri;
   
